@@ -1,0 +1,17 @@
+# depslib dependency file v1.0
+1675453507 source:e:\github\mabani project\mbproject\main.c
+	<stdio.h>
+	<direct.h>
+	"basicFunctions.c"
+	"inputFunctions.c"
+
+1675452941 e:\github\mabani project\mbproject\basicfunctions.c
+	<stdio.h>
+	<direct.h>
+	<windows.h>
+	<sys/types.h>
+
+1675453607 e:\github\mabani project\mbproject\inputfunctions.c
+	<stdio.h>
+	<direct.h>
+
