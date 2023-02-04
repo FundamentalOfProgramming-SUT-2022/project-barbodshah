@@ -775,6 +775,7 @@ void autoIndent(char* dirname){
     int tabCounter = 0;
 
     int newLine = 0;
+    char lastChar = NULL;
 
     for(int i = 0; i < strlen(fileStr); i++)
     {
@@ -814,6 +815,11 @@ void autoIndent(char* dirname){
 
                 tabCounter--;
 
+                if(lastChar == '{'){
+                    finalStr[index] = '\n';
+                    index++;
+                }
+
                 if(newLine){
                     for(int j = 0; j < tabCounter * 3; j++){
                         finalStr[index] = ' ';
@@ -821,7 +827,6 @@ void autoIndent(char* dirname){
                     }
                     newLine = 0;
                 }
-
                 finalStr[index] = fileStr[i];
                 index++;
                 finalStr[index] = '\n';
@@ -864,6 +869,7 @@ void autoIndent(char* dirname){
                 }
             }
         }
+        if(fileStr[i] != ' ' && fileStr[i] != '\n') lastChar = fileStr[i];
     }
     dirname[0] = 'r';
     dirname[1] = 'o';
