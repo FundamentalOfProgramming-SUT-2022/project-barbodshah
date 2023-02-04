@@ -786,7 +786,7 @@ void autoIndent(char* dirname){
             if(fileStr[i] == '{'){
 
                 if(newLine){
-                    for(int j = 0; j < tabCounter * 3; j++){
+                    for(int j = 0; j < tabCounter * 4; j++){
                         finalStr[index] = ' ';
                         index++;
                     }
@@ -821,7 +821,7 @@ void autoIndent(char* dirname){
                 }
 
                 if(newLine){
-                    for(int j = 0; j < tabCounter * 3; j++){
+                    for(int j = 0; j < tabCounter * 4; j++){
                         finalStr[index] = ' ';
                         index++;
                     }
@@ -837,7 +837,7 @@ void autoIndent(char* dirname){
             else if(fileStr[i] == ';'){
 
                 if(newLine){
-                    for(int j = 0; j < tabCounter * 3; j++){
+                    for(int j = 0; j < tabCounter * 4; j++){
                         finalStr[index] = ' ';
                         index++;
                     }
@@ -857,7 +857,7 @@ void autoIndent(char* dirname){
                 }
                 else{
                     if(newLine){
-                        for(int j = 0; j < tabCounter * 3; j++){
+                        for(int j = 0; j < tabCounter * 4; j++){
                             finalStr[index] = ' ';
                             index++;
                         }
