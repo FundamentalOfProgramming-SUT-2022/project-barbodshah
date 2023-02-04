@@ -1100,62 +1100,63 @@ void compare(char* dir1, char* dir2){
 }
 
 void tree(char path[], int root, const int mainroot){
-        /*DIR *directory;
-        struct dirent *entry;
-        directory = opendir(path);
 
-        if(directory == NULL)
+    DIR *directory;
+    struct dirent *entry;
+    directory = opendir(path);
+
+    if(directory == NULL)
+    {
+        printf("Directory Not Found");
+        return 1;
+    }
+
+    while((entry = readdir(directory)) != NULL)
+    {
+        if(!strcmp((entry->d_name),"."))
+            continue;
+        if(!strcmp((entry->d_name),".."))
+            continue;
+
+        printf("├");
+        strcat(arman_str,"├");
+        for(int i = 0;i<mainroot-root+1;i++)
         {
-            printf("Directory Not Found");
-            return 1;
+            printf("──");
+        }
+        if(entry->d_type == DT_DIR)
+        {
+            printf(" %s:\n",entry->d_name);
+            strcat(arman_str,entry->d_name);
+            strcat(arman_str,":\n");
         }
 
-        while((entry = readdir(directory)) != NULL)
+        else
         {
-            if(!strcmp((entry->d_name),"."))
-                continue;
-            if(!strcmp((entry->d_name),".."))
-                continue;
-
-            printf("├");
-            strcat(arman_str,"├");
-            for(int i = 0;i<mainroot-root+1;i++)
-            {
-                printf("──");
-            }
-            if(entry->d_type == DT_DIR)
-            {
-                printf(" %s:\n",entry->d_name);
-                strcat(arman_str,entry->d_name);
-                strcat(arman_str,":\n");
-            }
-
-            else
-            {
-                printf(" %s\n",entry->d_name);
-                strcat(arman_str,entry->d_name);
-                strcat(arman_str,"\n");
-            }
-
-
-            if(entry->d_type == DT_DIR && root > 0)
-            {
-                char newpath[maxl];
-                int n = strlen(path);
-                for(int i = 0;i<n;i++)
-                {
-                    newpath[i] = path[i];
-                }
-                newpath[n] = '/';
-                for(int i = 0;i<strlen(entry->d_name);i++)
-                {
-                    newpath[i+n+1] = (entry->d_name)[i];
-                }
-                newpath[n+strlen(entry->d_name)+1] = '\0';
-                tree(newpath,root-1,mainroot);
-            }
+            printf(" %s\n",entry->d_name);
+            strcat(arman_str,entry->d_name);
+            strcat(arman_str,"\n");
         }
-        closedir(directory);*/
+
+
+        if(entry->d_type == DT_DIR && root > 0)
+        {
+            char newpath[maxl];
+            int n = strlen(path);
+            for(int i = 0;i<n;i++)
+            {
+                newpath[i] = path[i];
+            }
+            newpath[n] = '/';
+            for(int i = 0;i<strlen(entry->d_name);i++)
+            {
+                newpath[i+n+1] = (entry->d_name)[i];
+            }
+            newpath[n+strlen(entry->d_name)+1] = '\0';
+            tree(newpath,root-1,mainroot);
+        }
+    }
+    closedir(directory);
 }
 
 void Undo(char* dirname){

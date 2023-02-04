@@ -185,6 +185,11 @@ void treeInput(){
     int depth;
     scanf("%d", depth);
 
+    if(depth < -1){
+        printf("Invalid Depth\n");
+        return;
+    }
+
     tree("tree", depth, depth);
 }
 
