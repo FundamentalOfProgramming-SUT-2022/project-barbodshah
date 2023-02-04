@@ -185,7 +185,7 @@ void treeInput(){
     int depth;
     scanf("%d", depth);
 
-    Tree(depth);
+    tree("tree", depth, depth);
 }
 
 void compareInput(){

@@ -293,19 +293,119 @@ void pasteStr(char* dirname, int line, int character){
     InsertStr(dirname, str, line, character);
 }
 
+void findWildCard(char* inputstr, char* filestr, int count, int at, int byword, int all, int atNum){
+
+    int matchIndex = 0;
+
+    int counter = 0, wordCounter = 1;
+
+    if(inputstr[0] == '*') matchIndex = 1;
+
+    for(int i = 0; i < strlen(filestr); i++)
+    {
+        if(inputstr[matchIndex] == filestr[i])
+        {
+            int match = 1;
+            int index = 0;
+
+            for(int j = 0; j < strlen(inputstr); j++)
+            {
+                if(inputstr[j] == '*'){
+                    if(j == strlen(inputstr) - 1){
+                        break;
+                    }
+                    while(filestr[i + index] != inputstr[j + 1]){
+                        index++;
+
+                        if(filestr[i + index] == ' '){
+                            match = 0;
+                            break;
+                        }
+
+                        if(i + index == strlen(inputstr)){
+                            match = 0;
+                            break;
+                        }
+                    }
+                }
+                else{
+                    if(inputstr[j] != filestr[i + index]){
+                        match = 0;
+                        break;
+                    }
+                    index++;
+                }
+            }
+            if(match == 1){
+                if(count || at){
+                    counter++;
+
+                    if(at && atNum == counter){
+                        if(byword){
+                            printf("%d ", wordCounter);
+                        }
+                        else{
+                            printf("%d ", i - matchIndex);
+                        }
+                    }
+                }
+                else{
+                    if(byword){
+                            printf("%d ", wordCounter);
+                        }
+                        else{
+                            printf("%d ", i - matchIndex);
+                    }
+                    if(all == 0) break;
+                }
+            }
+        }
+    }
+    if(count && at == 0){
+        printf("%d\n", counter);
+    }
+    else if(at && atNum > counter){
+        printf("-1\n");
+    }
+    else{
+        printf("\n");
+    }
+}
+
 void find(char* dirname, char* inputstr, int count, int at, int byword, int all, int atNum){
 
     FILE* ptr;
     ptr = fopen(dirname, "a+");
 
-    int counter = 0, wordCounter = 1;
+    int counter = 0, wordCounter = 1, wildCard = 0;
 
     if(ptr == NULL){
         printf("File not found\n");
         return;
     }
 
+    for(int i = 0; i < strlen(inputstr); i++){
+        if(inputstr[i] == '*'){
+            if(i == 0){
+                wildCard = 1;
+                break;
+            }
+            else{
+                if(inputstr[i - 1] != '\\'){
+                    wildCard = 1;
+                    break;
+                }
+            }
+        }
+    }
+
     char* fileStr = readFile(ptr);
+
+    if(wildCard){
+        findWildCard(inputstr, fileStr, count, at, byword, all, atNum);
+        fclose(ptr);
+        return;
+    }
 
     for(int i = 0; i < strlen(fileStr); i++)
     {
@@ -344,18 +444,151 @@ void find(char* dirname, char* inputstr, int count, int at, int byword, int all,
             }
         }
     }
-    printf("\n");
-
     if(count && at == 0){
         printf("%d\n", counter);
     }
-    if(at && atNum > counter){
+    else if(at && atNum > counter){
         printf("-1\n");
+    }
+    else{
+        printf("\n");
     }
     fclose(ptr);
 }
 
+void ReplaceWildCard(char* dirname, char* str1, char* str2, int all, int at, int atNum){
+
+    FILE* ptr;
+    ptr = fopen(dirname, "a+");
+
+    int matchCounter = 0;
+
+    if(ptr == NULL){
+        printf("File not found\n");
+        return;
+    }
+
+    dirname[0] = 't';
+    dirname[1] = 'e';
+    dirname[2] = 'm';
+    dirname[3] = 'p';
+
+    FILE* tempPtr;
+    tempPtr = fopen(dirname, "w");
+
+    char* fileStr = readFile(ptr);
+
+    fputs(fileStr, tempPtr);
+    fclose(tempPtr);
+
+    char* finalStr = malloc(sizeof(char) * lenght);
+
+    int index = 0;
+
+    int wildCardLenght = 0;
+
+    for(int i = 0; i < strlen(fileStr); i++)
+    {
+        if(str1[0] == fileStr[i]){
+
+            int match = 1;
+            int secIndex = 0;
+
+            for(int j = 0; j < strlen(str1); j++)
+            {
+                if(str1[j] == '*'){
+                    if(j == strlen(str1) - 1)
+                    {
+                        while(fileStr[i + secIndex] != ' '){
+                            secIndex++;
+                            wildCardLenght++;
+                        }
+                        break;
+                    }
+                    while(fileStr[i + secIndex] != str1[j + 1]){
+                        secIndex++;
+                        wildCardLenght++;
+
+                        if(fileStr[i + secIndex] == ' '){
+                            match = 0;
+                            break;
+                        }
+
+                        if(i + secIndex == strlen(str1)){
+                            match = 0;
+                            break;
+                        }
+                    }
+                }
+                else{
+                    if(str1[j] != fileStr[i + secIndex]){
+                        match = 0;
+                        break;
+                    }
+                    secIndex++;
+                }
+            }
+            if(match == 1){
+
+                matchCounter++;
+
+                if((all) || (at && atNum == matchCounter) || (at == 0 && all == 0 && matchCounter == 1)){
+                    for(int j = 0; j < strlen(str2); j++){
+                        finalStr[index] = str2[j];
+                        index++;
+                    }
+                    i = i + wildCardLenght + strlen(str1) - 2;
+                    wildCardLenght = 0;
+                }
+                else{
+                    finalStr[index] = fileStr[i];
+                    index++;
+                }
+            }
+        }
+        else{
+            finalStr[index] = fileStr[i];
+            index++;
+        }
+    }
+    dirname[0] = 'r';
+    dirname[1] = 'o';
+    dirname[2] = 'o';
+    dirname[3] = 't';
+
+    finalStr[index] = '\0';
+
+    ptr = fopen(dirname, "w");
+    fputs(finalStr, ptr);
+
+    printf("%s", finalStr);
+    printf("\n");
+
+    fclose(ptr);
+}
+
 void Replace(char* dirname, char* str1, char* str2, int all, int at, int atNum){
+
+    int wildCard = 0;
+
+    for(int i = 0; i < strlen(str1); i++){
+        if(str1[i] == '*'){
+            if(i == 0){
+                wildCard = 1;
+                break;
+            }
+            else{
+                if(str1[i - 1] != '\\'){
+                    wildCard = 1;
+                    break;
+                }
+            }
+        }
+    }
+    if(wildCard){
+        ReplaceWildCard(dirname, str1, str2, all, at, atNum);
+        return;
+    }
 
     FILE* ptr;
     ptr = fopen(dirname, "a+");
@@ -561,8 +794,15 @@ void autoIndent(char* dirname){
 
                 tabCounter++;
 
-                finalStr[index] = ' ';
-                index++;
+                if(index == 0){
+                }
+                else if(finalStr[index - 1] == ' ' || finalStr[index - 1] == '\n'){
+                }
+                else{
+                    finalStr[index] = ' ';
+                    index++;
+                }
+
                 finalStr[index] = fileStr[i];
                 index++;
                 finalStr[index] = '\n';
