@@ -48,7 +48,15 @@ void createFile(char *dirname, int temp){
                 stringEnded = 1;
 
                 FILE* ptr;
+                ptr = fopen(dirname, "r");
+
+                if(ptr != NULL && temp == 0){
+                    printf("File Already Exists\n");
+                    return;
+                }
+
                 ptr = fopen(dirname, "w");
+
                 fclose(ptr);
 
                 break;
@@ -1101,7 +1109,7 @@ void compare(char* dir1, char* dir2){
 
 void tree(char path[], int root, const int mainroot){
 
-    DIR *directory;
+    /*DIR *directory;
     struct dirent *entry;
     directory = opendir(path);
 
@@ -1156,7 +1164,7 @@ void tree(char path[], int root, const int mainroot){
             tree(newpath,root-1,mainroot);
         }
     }
-    closedir(directory);
+    closedir(directory);*/
 }
 
 void Undo(char* dirname){

@@ -19,6 +19,11 @@ void getOrder(char inp[]){
             dirname[4] = 'p';
 
             createFile(removeFirstChar(dirname), 1);
+            return;
+        }
+        else{
+            printf("Invalid Input\n");
+            return;
         }
     }
     if(strcmp(inp, "insertstr") == 0){
@@ -29,10 +34,16 @@ void getOrder(char inp[]){
         {
             char* dirname = getString(1);
             InsertStrInput(removeFirstChar(dirname));
+            return;
+        }
+        else{
+            printf("Invalid Input\n");
+            return;
         }
     }
     if(strcmp(inp, "cat") == 0){
         catInput();
+        return;
     }
     if(strcmp(inp, "removestr") == 0){
         char temp[lenght];
@@ -42,6 +53,11 @@ void getOrder(char inp[]){
         {
             char* dirname = getString(1);
             removeStrInput(removeFirstChar(dirname));
+            return;
+        }
+        else{
+            printf("Invalid Input\n");
+            return;
         }
     }
     if(strcmp(inp, "copystr") == 0){
@@ -52,6 +68,12 @@ void getOrder(char inp[]){
         {
             char* dirname = getString(1);
             copyStrInput(removeFirstChar(dirname));
+
+            return;
+        }
+        else{
+            printf("Invalid Input\n");
+            return;
         }
     }
     if(strcmp(inp, "cutstr") == 0){
@@ -62,6 +84,12 @@ void getOrder(char inp[]){
         {
             char* dirname = getString(1);
             cutStrInput(removeFirstChar(dirname));
+
+            return;
+        }
+        else{
+            printf("Invalid Input\n");
+            return;
         }
     }
     if(strcmp(inp, "pastestr") == 0){
@@ -72,6 +100,12 @@ void getOrder(char inp[]){
         {
             char* dirname = getString(1);
             pasteStrInput(removeFirstChar(dirname));
+
+            return;
+        }
+        else{
+            printf("Invalid Input\n");
+            return;
         }
     }
     if(strcmp(inp, "find") == 0){
@@ -82,26 +116,39 @@ void getOrder(char inp[]){
         {
             char* inputstr = getString(1);
             findInput(inputstr);
+
+            return;
+        }
+        else{
+            printf("Invalid Input\n");
+            return;
         }
     }
     if(strcmp(inp, "replace") == 0){
         ReplaceInput();
+        return;
     }
     if(strcmp(inp, "grep") == 0){
         GrepInput();
+        return;
     }
     if(strcmp(inp, "auto-indent") == 0){
         AutoIndentInput();
+        return;
     }
     if(strcmp(inp, "compare") == 0){
         compareInput();
+        return;
     }
     if(strcmp(inp, "tree") == 0){
         treeInput();
+        return;
     }
     if(strcmp(inp, "undo") == 0){
         undoInput();
+        return;
     }
+    printf("Invalid Input\n");
 }
 
 void armanOrder(){
